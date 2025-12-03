@@ -1,9 +1,13 @@
 use std::{
     alloc::{GlobalAlloc, Layout},
+    mem::transmute,
     ptr::NonNull,
 };
 
+use shared::Program;
 use vtable_rs::VPtr;
+
+use crate::rva;
 
 #[vtable_rs::vtable]
 pub trait DLAllocatorVmt {
@@ -211,4 +215,18 @@ impl DLAllocatorVmt for DLAllocatorBase {
     extern "C" fn get_memory_block_for_allocation(&mut self, _allocation: *const u8) -> *const u8 {
         todo!()
     }
+}
+
+type FnGetHeapAllocatorOf = extern "C" fn(*const u8) -> &'static mut DLAllocatorBase;
+
+pub fn get_heap_allocator_of(ptr: *const u8) -> &'static mut DLAllocatorBase {
+    let target: FnGetHeapAllocatorOf = unsafe {
+        transmute(
+            Program::current()
+                .rva_to_va(rva::get().get_heap_allocator_of)
+                .unwrap(),
+        )
+    };
+
+    target(ptr)
 }

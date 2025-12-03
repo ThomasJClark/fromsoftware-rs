@@ -23,6 +23,7 @@ pub const RVAS: RvaBundle = RvaBundle {
     cs_menu_man_imp_display_status_message: 0x766460,
     cs_phys_world_cast_ray: 0xc707b0,
     game_man: 0x3d69918,
+    get_heap_allocator_of: 0xe1a2c0,
     global_hinstance: 0x3d85688,
     initialize_spawn_geometry_request: 0x1db670,
     multiplay_properties: 0x3b11230,

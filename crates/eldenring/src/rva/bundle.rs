@@ -23,6 +23,7 @@ pub struct RvaBundle {
     pub cs_menu_man_imp_display_status_message: u32,
     pub cs_phys_world_cast_ray: u32,
     pub game_man: u32,
+    pub get_heap_allocator_of: u32,
     pub global_hinstance: u32,
     pub initialize_spawn_geometry_request: u32,
     pub multiplay_properties: u32,

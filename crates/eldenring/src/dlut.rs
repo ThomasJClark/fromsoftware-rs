@@ -1,12 +1,18 @@
 use std::{
+    fmt,
     hint::assert_unchecked,
-    mem::MaybeUninit,
-    ops::{Index, IndexMut},
+    mem::{self, MaybeUninit},
+    ops::{Deref, DerefMut, Index, IndexMut},
+    ptr::{self, NonNull},
     slice,
 };
 
 use bitfield::bitfield;
+use pelite::pe64::Pe;
+use shared::Program;
 use vtable_rs::VPtr;
+
+use crate::dlkr::{DLAllocatorBase, DLAllocatorVmt, get_heap_allocator_of};
 
 #[vtable_rs::vtable]
 pub trait DLReferenceCountObjectVmt {
@@ -276,3 +282,74 @@ impl<T, const C: usize> Drop for DLFixedVector<T, C> {
         self.truncate(0);
     }
 }
+
+#[repr(transparent)]
+/// A smart pointer that owns a heap allocation. This is similar to `std::unique_ptr`/`Box`, but
+/// it looks up the allocator from a list of known global allocators when it's time to dispose of
+/// the heap allocation, rather than encoding a deleter function in the type.
+///
+/// This exists to mimic the semantics of a FromSoftware smart pointer with the same name, and is
+/// not recommended to use in your own Rust structures instead of `Box`.
+struct DLAutoDeletePtr<T>(NonNull<T>);
+
+impl<T> DLAutoDeletePtr<T> {
+    #[inline(always)]
+    pub fn try_new(value: T) -> Option<Self> {
+        let ingame_heap_allocator =
+            Program::current().rva_to_va(0x3d87308).unwrap() as *mut DLAllocatorBase;
+
+        Self::try_new_in(value, unsafe { &mut *ingame_heap_allocator })
+    }
+
+    #[inline(always)]
+    pub fn try_new_in(value: T, allocator: &mut DLAllocatorBase) -> Option<Self> {
+        let ptr = allocator.allocate_aligned(mem::size_of::<T>(), mem::align_of::<T>());
+
+        let new = Self(NonNull::new(ptr as _)?);
+        unsafe { ptr::write(new.0.as_ptr(), value) };
+        Some(new)
+    }
+}
+
+impl<T> Drop for DLAutoDeletePtr<T> {
+    fn drop(&mut self) {
+        let ptr = self.0.as_ptr() as *const u8;
+        let allocator = get_heap_allocator_of(ptr);
+        allocator.deallocate(ptr);
+    }
+}
+
+impl<T> Deref for DLAutoDeletePtr<T> {
+    type Target = T;
+
+    fn deref(&self) -> &T {
+        unsafe { self.0.as_ref() }
+    }
+}
+
+impl<T> AsRef<T> for DLAutoDeletePtr<T> {
+    fn as_ref(&self) -> &T {
+        self.deref()
+    }
+}
+
+impl<T> DerefMut for DLAutoDeletePtr<T> {
+    fn deref_mut(&mut self) -> &mut T {
+        unsafe { self.0.as_mut() }
+    }
+}
+
+impl<T> AsMut<T> for DLAutoDeletePtr<T> {
+    fn as_mut(&mut self) -> &mut T {
+        self.deref_mut()
+    }
+}
+
+impl<T> fmt::Debug for DLAutoDeletePtr<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        self.0.fmt(f)
+    }
+}
+
+unsafe impl<T> Send for DLAutoDeletePtr<T> {}
+unsafe impl<T> Sync for DLAutoDeletePtr<T> where T: Sync {}

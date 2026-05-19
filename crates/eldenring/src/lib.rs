@@ -20,6 +20,7 @@ pub mod fd4;
 pub mod ffx;
 pub mod from_net;
 pub mod gxffx;
+pub mod havok;
 pub mod param;
 pub mod position;
 pub mod rotation;

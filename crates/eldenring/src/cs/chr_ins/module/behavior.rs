@@ -1,14 +1,25 @@
 use std::ptr::NonNull;
 
-use shared::F32Vector4;
+use shared::{F32Vector4, OwnedPtr};
 
-use crate::{cs::ChrIns, fd4::FD4Time};
+use crate::{cs::ChrIns, fd4::FD4Time, havok::HkbCharacter};
+
+#[repr(C)]
+pub struct HavokContext {
+    unk0: usize,
+    unk8: usize,
+    unk10: usize,
+    unk18: usize,
+    unk20: usize,
+    unk28: usize,
+    pub character: OwnedPtr<HkbCharacter>,
+}
 
 #[repr(C)]
 pub struct CSChrBehaviorModule {
     vftable: usize,
     pub owner: NonNull<ChrIns>,
-    unk10: usize,
+    pub havok_context: Option<OwnedPtr<HavokContext>>,
     unk18: usize,
     unk20: usize,
     unk28: usize,

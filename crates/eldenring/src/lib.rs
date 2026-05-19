@@ -17,6 +17,7 @@ pub mod ez_state;
 pub mod fd4;
 pub mod ffx;
 pub mod gxffx;
+pub mod havok;
 pub mod param;
 pub mod position;
 pub mod rotation;

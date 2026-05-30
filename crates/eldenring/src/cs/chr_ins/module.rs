@@ -1,3 +1,5 @@
+use std::ptr::NonNull;
+
 use shared::OwnedPtr;
 
 mod action_flag;
@@ -38,6 +40,18 @@ pub use time_act::*;
 pub use toughness::*;
 pub use wet::*;
 
+use crate::cs::ChrIns;
+
+#[repr(C)]
+/// Source of name: RTTI
+pub struct CSHitstopModule {
+    vftable: usize,
+    pub owner: NonNull<ChrIns>,
+    unk10: usize,
+    unk18: u32,
+    pub frame_time: f32,
+}
+
 #[repr(C)]
 pub struct ChrInsModuleContainer {
     pub data: OwnedPtr<CSChrDataModule>,
@@ -59,7 +73,7 @@ pub struct ChrInsModuleContainer {
     pub ladder: OwnedPtr<CSChrLadderModule>,
     pub action_request: OwnedPtr<CSChrActionRequestModule>,
     pub throw: OwnedPtr<CSChrThrowModule>,
-    hitstop: usize,
+    pub hitstop: OwnedPtr<CSHitstopModule>,
     damage: usize,
     pub material: OwnedPtr<CSChrMaterialModule>,
     knockback: usize,

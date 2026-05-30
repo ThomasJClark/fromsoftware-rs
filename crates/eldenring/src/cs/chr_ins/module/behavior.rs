@@ -1,8 +1,12 @@
 use std::ptr::NonNull;
 
-use shared::{F32Vector4, OwnedPtr};
+use shared::OwnedPtr;
 
-use crate::{cs::ChrIns, fd4::FD4Time, havok::HkbCharacter};
+use crate::{
+    cs::ChrIns,
+    fd4::FD4Time,
+    havok::{HkVector4, HkbCharacter},
+};
 
 #[repr(C)]
 pub struct HavokContext {
@@ -23,7 +27,7 @@ pub struct CSChrBehaviorModule {
     unk18: usize,
     unk20: usize,
     unk28: usize,
-    pub root_motion: F32Vector4,
+    pub root_motion: HkVector4,
     unk40: [u8; 0x20],
     unk60: [u8; 0xa48],
     unkaa8: [u8; 0x58],
@@ -39,7 +43,7 @@ pub struct CSChrBehaviorModule {
     /// Read from NpcParam, PI by default.
     pub max_ankle_roll_angle_rad: f32,
     unk168c: [u8; 0x104],
-    unk1790: F32Vector4,
+    unk1790: HkVector4,
     unk17a0: [u8; 0x10],
     chr_behavior_debug_anim_helper: usize,
     unk17b8: [u8; 0x10],

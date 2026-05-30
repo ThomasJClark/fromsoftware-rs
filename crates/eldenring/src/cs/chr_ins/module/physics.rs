@@ -5,8 +5,7 @@ use std::ptr::NonNull;
 use crate::{
     cs::{CSChrDataModule, ChrIns, PlayerGameData},
     fd4::FD4Time,
-    position::HavokPosition,
-    rotation::Quaternion,
+    havok::{HkQuaternion, HkVector4},
 };
 
 #[repr(C)]
@@ -18,12 +17,12 @@ pub struct CSChrPhysicsModule {
     unk18: [u8; 0x8],
     pub data_module: NonNull<CSChrDataModule>,
     unk28: [u8; 0x28],
-    pub orientation: Quaternion,
+    pub orientation: HkQuaternion,
     /// Rotation, controlled by specifics of the character's movement,
     /// can be changed by tae and interpolated towards the target rotation
-    pub interpolated_orientation: Quaternion,
-    pub position: HavokPosition,
-    pub last_update_position: HavokPosition,
+    pub interpolated_orientation: HkQuaternion,
+    pub position: HkVector4,
+    pub last_update_position: HkVector4,
     unk90: bool,
     pub chr_proxy_pos_update_requested: bool,
     pub standing_on_solid_ground: bool,
@@ -37,7 +36,7 @@ pub struct CSChrPhysicsModule {
     unkc8: f32,
     pub adjust_to_hi_collision: bool,
     unkcd: [u8; 0x3],
-    root_motion: F32Vector4,
+    pub root_motion: F32Vector4,
     root_motion_unk: F32Vector4,
     unkf0: F32Vector4,
     unk100: [u8; 0x4],

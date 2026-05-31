@@ -1,12 +1,13 @@
-use std::{ptr::NonNull, string::FromUtf8Error};
+use std::ptr::NonNull;
 
 use crate::{
-    BasicVector, Vector,
+    DLVector,
     cs::{MultiplayRole, MultiplayType, SummonParamType},
     dltx::DLString,
     fd4::{FD4StepBase, FD4StepBaseInterface, FD4Time},
+    from_net::{FNString, FNVector},
     position::BlockPosition,
-    stl::DoublyLinkedList,
+    stl::DLList,
 };
 use shared::{OwnedPtr, StepperStates};
 
@@ -58,16 +59,16 @@ pub struct CSNetMan {
 pub struct CSNetBloodMessageDb {
     vftable: usize,
     // Contains all CSNetBloodMessageDbItem?
-    pub entries: DoublyLinkedList<OwnedPtr<CSNetBloodMessageDbItem>>,
+    pub entries: DLList<OwnedPtr<CSNetBloodMessageDbItem>>,
     unk20: usize,
     /// Seemingly contains message data for messages created by local user
-    pub created_data: DoublyLinkedList<usize>,
+    pub created_data: DLList<usize>,
     // Contains ???
-    unk40: DoublyLinkedList<usize>,
+    unk40: DLList<usize>,
     unk58: usize,
     blood_message_ins_man_1: usize,
     blood_message_ins_man_2: usize,
-    pub discovered_messages: DoublyLinkedList<OwnedPtr<OwnedPtr<CSNetBloodMessageDbItem>>>,
+    pub discovered_messages: DLList<OwnedPtr<OwnedPtr<CSNetBloodMessageDbItem>>>,
     unk88: [u8; 0xD0],
     /// Hosts any ongoing jobs for evaluations.
     evaluate_job: usize,
@@ -109,18 +110,18 @@ pub struct BreakInData {
     pub multiplay_role: MultiplayRole,
     pub has_password: bool,
     unk1e: u8,
-    pub join_data: BasicVector<u8>,
+    pub join_data: FNVector<u8>,
 }
 
 #[repr(C)]
 pub struct BreakInPointManager {
-    breakin_points: DoublyLinkedList<()>,
+    breakin_points: DLList<()>,
     unk18: [u8; 0x10],
 }
 
 #[repr(C)]
 pub struct BreakInAreaList {
-    pub areas: Vector<u32>,
+    pub areas: DLVector<u32>,
     pub count: u32,
 }
 
@@ -136,21 +137,15 @@ pub enum BreakInSearchState {
 #[repr(C)]
 pub struct BreakInTarget {
     pub player_id: u32,
-    pub external_id: BasicVector<u8>,
+    pub external_id: FNString,
     pub play_region: u32,
-}
-
-impl BreakInTarget {
-    pub fn external_id_str(&self) -> Result<String, FromUtf8Error> {
-        String::from_utf8(self.external_id.items().to_vec())
-    }
 }
 
 #[repr(C)]
 pub struct BreakInManager {
     pub multiplay_type: MultiplayType,
-    pub targets: BasicVector<BreakInTarget>,
-    unk20: BasicVector<()>,
+    pub targets: FNVector<BreakInTarget>,
+    unk20: FNVector<()>,
     /// Data from breakin push
     pub data: BreakInData,
     pub point_manager: BreakInPointManager,
@@ -264,91 +259,44 @@ pub struct CSBattleRoyalContext {
     unkf4: u32,
 }
 
-#[repr(u32)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-/// Enum describing various quickmatch (arena) gamemode settings
-pub enum QuickMatchSettings {
-    Duel = 0,
-    Brawl1v1 = 1,
-    Brawl2v2 = 2,
-    Brawl3v3 = 3,
-    Team1v1 = 4,
-    Team2v2 = 5,
-    Team3v3 = 6,
-    AlliesPasswordTeam1v1 = 7,
-    AlliesPasswordTeam2v2 = 8,
-    AlliesPasswordTeam3v3 = 9,
-    SpiritAshesDuel = 10,
-    SpiritAshesBrawl1v1 = 11,
-    SpiritAshesBrawl2v2 = 12,
-    SpiritAshesBrawl3v3 = 13,
-    SpiritAshesTeam1v1 = 14,
-    SpiritAshesTeam2v2 = 15,
-    SpiritAshesTeam3v3 = 16,
-    SpiritAshesAlliesPasswordTeam1v1 = 17,
-    SpiritAshesAlliesPasswordTeam2v2 = 18,
-    SpiritAshesAlliesPasswordTeam3v3 = 19,
+pub enum QuickMatchSize {
+    /// Special case for Duel.
+    Duel,
+    /// One player vs one player in brawl or team mode with no additional allies.
+    OneVsOne,
+    TwoVsTwo,
+    ThreeVsThree,
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct QuickMatchSettings(pub u32);
 
 impl QuickMatchSettings {
     /// Whether or not this gamemode allows spirit ashes summoning.
-    pub const fn spirit_ashes_allowed(&self) -> bool {
-        matches!(
-            self,
-            QuickMatchSettings::SpiritAshesDuel
-                | QuickMatchSettings::SpiritAshesBrawl1v1
-                | QuickMatchSettings::SpiritAshesBrawl2v2
-                | QuickMatchSettings::SpiritAshesBrawl3v3
-                | QuickMatchSettings::SpiritAshesTeam1v1
-                | QuickMatchSettings::SpiritAshesTeam2v2
-                | QuickMatchSettings::SpiritAshesTeam3v3
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam1v1
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam2v2
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam3v3
-        )
+    pub const fn spirit_ashes_allowed(self) -> bool {
+        self.0 >= 10
+    }
+    /// Whether or not this gamemode is brawl mode.
+    pub const fn is_brawl_mode(self) -> bool {
+        matches!(self.0 % 10, 1..=3)
     }
     /// Whether or not this gamemode is team-based.
-    pub const fn is_team_mode(&self) -> bool {
-        matches!(
-            self,
-            QuickMatchSettings::Team1v1
-                | QuickMatchSettings::Team2v2
-                | QuickMatchSettings::Team3v3
-                | QuickMatchSettings::AlliesPasswordTeam1v1
-                | QuickMatchSettings::AlliesPasswordTeam2v2
-                | QuickMatchSettings::AlliesPasswordTeam3v3
-                | QuickMatchSettings::SpiritAshesTeam1v1
-                | QuickMatchSettings::SpiritAshesTeam2v2
-                | QuickMatchSettings::SpiritAshesTeam3v3
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam1v1
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam2v2
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam3v3
-        )
+    pub const fn is_team_mode(self) -> bool {
+        matches!(self.0 % 10, 4..=9)
     }
     /// Whether or not this gamemode uses password for match you with your allies.
     /// Compared to just being password protected lobby where password doesn't affect team composition.
-    pub const fn is_allies_password_mode(&self) -> bool {
-        matches!(
-            self,
-            QuickMatchSettings::AlliesPasswordTeam1v1
-                | QuickMatchSettings::AlliesPasswordTeam2v2
-                | QuickMatchSettings::AlliesPasswordTeam3v3
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam1v1
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam2v2
-                | QuickMatchSettings::SpiritAshesAlliesPasswordTeam3v3
-        )
+    pub const fn is_allies_password_mode(self) -> bool {
+        matches!(self.0 % 10, 7..=9)
     }
-    /// Whether or not this gamemode is a brawl (free-for-all) mode.
-    pub const fn is_brawl_mode(&self) -> bool {
-        matches!(
-            self,
-            QuickMatchSettings::Brawl1v1
-                | QuickMatchSettings::Brawl2v2
-                | QuickMatchSettings::Brawl3v3
-                | QuickMatchSettings::SpiritAshesBrawl1v1
-                | QuickMatchSettings::SpiritAshesBrawl2v2
-                | QuickMatchSettings::SpiritAshesBrawl3v3
-        )
+    pub const fn match_size(self) -> QuickMatchSize {
+        match self.0 % 10 {
+            1 | 4 | 7 => QuickMatchSize::OneVsOne,
+            2 | 5 | 8 => QuickMatchSize::TwoVsTwo,
+            3 | 6 | 9 => QuickMatchSize::ThreeVsThree,
+            _ => QuickMatchSize::Duel,
+        }
     }
 }
 
@@ -363,11 +311,11 @@ pub struct CSQuickMatchContext {
     /// Spawn data for the local player.
     pub spawn_data: QuickmatchSpawnData,
     /// Vector of arenas available for quickmatch to randomly select from.
-    pub arena_list: BasicVector<QuickMatchArena>,
-    unk40: Vector<usize>,
-    unk60: Vector<usize>,
+    pub arena_list: FNVector<QuickMatchArena>,
+    unk40: DLVector<usize>,
+    unk60: DLVector<usize>,
     /// All quickmatch participants.
-    pub participants: DoublyLinkedList<QuickmatchParticipant>,
+    pub participants: DLList<QuickmatchParticipant>,
     unk98: u8,
     /// Seems to be indicative of why some QM lobby failed
     pub error_state: u8,

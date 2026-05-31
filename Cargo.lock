@@ -69,10 +69,10 @@ checksum = "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
 
 [[package]]
 name = "apply-speffect"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
 ]
 
 [[package]]
@@ -99,10 +99,10 @@ checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 
 [[package]]
 name = "binary-mapper"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "clap",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "memmap",
  "pelite",
  "rayon",
@@ -266,78 +266,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
 
 [[package]]
-name = "cstl-sys"
-version = "2.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93cb3efebcf02ee15186d55068b8394bf5df33331feabda4f2cdcf3573d7c659"
-dependencies = [
- "cc",
-]
-
-[[package]]
-name = "cxx-stl"
-version = "3.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb3ba5d51c332fde0852e7ec374e51d297361cbe0e8007f075765199951c4eb9"
-dependencies = [
- "cstl-sys",
-]
-
-[[package]]
-name = "cxx-stl"
-version = "4.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e42cf6d86f92c165eaf2d4afa54382ec9b8d1cdef39f4265bc938cd055198f83"
-dependencies = [
- "cstl-sys",
-]
-
-[[package]]
 name = "darksouls3"
-version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46d3df52b6a59631a6032d09b76637c8b0ef9b289596c8a174bba1badf450020"
+version = "0.14.0"
 dependencies = [
  "bitfield",
- "cxx-stl 3.4.0",
  "encoding_rs",
- "fromsoftware-shared 0.12.0",
- "pelite",
- "regex",
- "serde",
- "serde_derive",
- "thiserror 1.0.69",
- "vtable-rs",
- "windows 0.54.0",
-]
-
-[[package]]
-name = "darksouls3"
-version = "0.13.0"
-dependencies = [
- "bitfield",
- "cxx-stl 4.4.0",
- "encoding_rs",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
+ "fromsoftware-shared-stl",
  "pelite",
  "thiserror 1.0.69",
  "vtable-rs",
  "windows 0.61.3",
-]
-
-[[package]]
-name = "darksouls3-extra"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8fec68c565cd9e94073f1c3f13754001dc937737f0bb54820e2cebf54c301d8"
-dependencies = [
- "bitflags 2.11.1",
- "darksouls3 0.12.0",
- "fromsoftware-shared 0.12.0",
- "ilhook",
- "pelite",
- "thiserror 1.0.69",
- "windows 0.54.0",
 ]
 
 [[package]]
@@ -351,11 +290,13 @@ dependencies = [
 
 [[package]]
 name = "debug"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
+ "bitflags 2.11.1",
  "clipboard-win",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "hudhook",
+ "ilhook",
  "libhotpatch",
  "tracing",
  "tracing-appender",
@@ -366,12 +307,11 @@ dependencies = [
 
 [[package]]
 name = "debug-darksouls3"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
- "darksouls3 0.13.0",
- "darksouls3-extra",
+ "darksouls3",
  "debug",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "hudhook",
  "libhotpatch",
  "pelite",
@@ -384,11 +324,11 @@ dependencies = [
 
 [[package]]
 name = "debug-eldenring"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "debug",
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "hudhook",
  "libhotpatch",
  "pelite",
@@ -401,19 +341,19 @@ dependencies = [
 
 [[package]]
 name = "debug-line"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "glam",
 ]
 
 [[package]]
 name = "debug-sekiro"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "debug",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "hudhook",
  "libhotpatch",
  "pelite",
@@ -448,13 +388,13 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "eldenring"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "bitfield",
  "bitflags 2.11.1",
- "cxx-stl 4.4.0",
  "encoding_rs",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
+ "fromsoftware-shared-stl",
  "glam",
  "num_enum",
  "pelite",
@@ -527,27 +467,11 @@ dependencies = [
 
 [[package]]
 name = "fromsoftware-shared"
-version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c175c296b9d827c839de32a0d9107d6420d1e145175189a7f6957ce4d1506348"
-dependencies = [
- "from-singleton",
- "fromsoftware-shared-macros 0.12.0",
- "glam",
- "pelite",
- "thiserror 1.0.69",
- "undname",
- "vtable-rs",
- "windows 0.54.0",
-]
-
-[[package]]
-name = "fromsoftware-shared"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "bitflags 2.11.1",
  "from-singleton",
- "fromsoftware-shared-macros 0.13.0",
+ "fromsoftware-shared-macros",
  "glam",
  "pelite",
  "thiserror 1.0.69",
@@ -558,19 +482,7 @@ dependencies = [
 
 [[package]]
 name = "fromsoftware-shared-macros"
-version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83a0ee48757ea237db11eeb52b1814493422ec5304eb569a82271df9f8eccf30"
-dependencies = [
- "inflections",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "fromsoftware-shared-macros"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "inflections",
  "proc-macro2",
@@ -580,7 +492,7 @@ dependencies = [
 
 [[package]]
 name = "fromsoftware-shared-stl"
-version = "0.13.0"
+version = "0.14.0"
 
 [[package]]
 name = "fxhash"
@@ -739,10 +651,10 @@ checksum = "a257582fdcde896fd96463bf2d40eefea0580021c0712a0e2b028b60b47a837a"
 
 [[package]]
 name = "invoke-esd"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
  "windows 0.61.3",
 ]
 
@@ -895,7 +807,7 @@ checksum = "e53debba6bda7a793e5f99b8dacf19e626084f525f7829104ba9898f367d85ff"
 
 [[package]]
 name = "nightreign"
-version = "0.13.0"
+version = "0.14.0"
 
 [[package]]
 name = "no-std-compat"
@@ -920,9 +832,9 @@ dependencies = [
 
 [[package]]
 name = "num-conv"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6673768db2d862beb9b39a78fdcb1a69439615d5794a1be50caa9bc92c81967"
+checksum = "521739c6d2bac4aa25192232afe6841231376b2b26d4d9fae5ecf8ca5772e441"
 
 [[package]]
 name = "num-traits"
@@ -969,7 +881,7 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
 name = "param-generator"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "clap",
  "quick-xml",
@@ -1032,10 +944,10 @@ checksum = "439ee305def115ba05938db6eb1644ff94165c5ab5e9420d1c1bcedbba909391"
 
 [[package]]
 name = "present-action-button"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
 ]
 
 [[package]]
@@ -1204,13 +1116,13 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "sekiro"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "bitfield",
  "bitflags 2.11.1",
- "cxx-stl 4.4.0",
  "encoding_rs",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
+ "fromsoftware-shared-stl",
  "pelite",
  "thiserror 1.0.69",
  "vtable-rs",
@@ -1298,10 +1210,10 @@ checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
 
 [[package]]
 name = "spawn-asset"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "eldenring",
- "fromsoftware-shared 0.13.0",
+ "fromsoftware-shared",
 ]
 
 [[package]]
@@ -1342,7 +1254,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.13.0"
+version = "0.14.0"
 dependencies = [
  "anyhow",
  "glob",
@@ -1702,16 +1614,6 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "windows"
-version = "0.54.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9252e5725dbed82865af151df558e754e4a3c2c30818359eb17465f1346a1b49"
-dependencies = [
- "windows-core 0.54.0",
- "windows-targets 0.52.6",
-]
-
-[[package]]
-name = "windows"
 version = "0.61.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9babd3a767a4c1aef6900409f85f5d53ce2544ccdfaa86dad48c91782c6d6893"
@@ -1751,16 +1653,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23b2d95af1a8a14a3c7367e1ed4fc9c20e0a26e79551b1454d72583c97cc6610"
 dependencies = [
  "windows-core 0.62.2",
-]
-
-[[package]]
-name = "windows-core"
-version = "0.54.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12661b9c89351d684a50a8a643ce5f608e20243b9fb84687800163429f161d65"
-dependencies = [
- "windows-result 0.1.2",
- "windows-targets 0.52.6",
 ]
 
 [[package]]
@@ -1867,15 +1759,6 @@ dependencies = [
 
 [[package]]
 name = "windows-result"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e383302e8ec8515204254685643de10811af0ed97ea37210dc26fb0032647f8"
-dependencies = [
- "windows-targets 0.52.6",
-]
-
-[[package]]
-name = "windows-result"
 version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56f42bd332cc6c8eac5af113fc0c1fd6a8fd2aa08a0119358686e5160d0586c6"
@@ -1931,7 +1814,7 @@ version = "0.60.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2f500e4d28234f72040990ec9d39e3a6b950f9f22d3dba18416c35882612bcb"
 dependencies = [
- "windows-targets 0.53.5",
+ "windows-targets",
 ]
 
 [[package]]
@@ -1945,22 +1828,6 @@ dependencies = [
 
 [[package]]
 name = "windows-targets"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b724f72796e036ab90c1021d4780d4d3d648aca59e491e6b98e725b84e99973"
-dependencies = [
- "windows_aarch64_gnullvm 0.52.6",
- "windows_aarch64_msvc 0.52.6",
- "windows_i686_gnu 0.52.6",
- "windows_i686_gnullvm 0.52.6",
- "windows_i686_msvc 0.52.6",
- "windows_x86_64_gnu 0.52.6",
- "windows_x86_64_gnullvm 0.52.6",
- "windows_x86_64_msvc 0.52.6",
-]
-
-[[package]]
-name = "windows-targets"
 version = "0.53.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4945f9f551b88e0d65f3db0bc25c33b8acea4d9e41163edf90dcd0b19f9069f3"
@@ -1969,7 +1836,7 @@ dependencies = [
  "windows_aarch64_gnullvm 0.53.1",
  "windows_aarch64_msvc 0.53.1",
  "windows_i686_gnu 0.53.1",
- "windows_i686_gnullvm 0.53.1",
+ "windows_i686_gnullvm",
  "windows_i686_msvc 0.53.1",
  "windows_x86_64_gnu 0.53.1",
  "windows_x86_64_gnullvm 0.53.1",
@@ -2002,12 +1869,6 @@ checksum = "597a5118570b68bc08d8d59125332c54f1ba9d9adeedeef5b99b02ba2b0698f8"
 
 [[package]]
 name = "windows_aarch64_gnullvm"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32a4622180e7a0ec044bb555404c800bc9fd9ec262ec147edd5989ccd0c02cd3"
-
-[[package]]
-name = "windows_aarch64_gnullvm"
 version = "0.53.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9d8416fa8b42f5c947f8482c43e7d89e73a173cead56d044f6a56104a6d1b53"
@@ -2017,12 +1878,6 @@ name = "windows_aarch64_msvc"
 version = "0.42.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e08e8864a60f06ef0d0ff4ba04124db8b0fb3be5776a5cd47641e942e58c4d43"
-
-[[package]]
-name = "windows_aarch64_msvc"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09ec2a7bb152e2252b53fa7803150007879548bc709c039df7627cabbd05d469"
 
 [[package]]
 name = "windows_aarch64_msvc"
@@ -2038,21 +1893,9 @@ checksum = "c61d927d8da41da96a81f029489353e68739737d3beca43145c8afec9a31a84f"
 
 [[package]]
 name = "windows_i686_gnu"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e9b5ad5ab802e97eb8e295ac6720e509ee4c243f69d781394014ebfe8bbfa0b"
-
-[[package]]
-name = "windows_i686_gnu"
 version = "0.53.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "960e6da069d81e09becb0ca57a65220ddff016ff2d6af6a223cf372a506593a3"
-
-[[package]]
-name = "windows_i686_gnullvm"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0eee52d38c090b3caa76c563b86c3a4bd71ef1a819287c19d586d7334ae8ed66"
 
 [[package]]
 name = "windows_i686_gnullvm"
@@ -2068,12 +1911,6 @@ checksum = "44d840b6ec649f480a41c8d80f9c65108b92d89345dd94027bfe06ac444d1060"
 
 [[package]]
 name = "windows_i686_msvc"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "240948bc05c5e7c6dabba28bf89d89ffce3e303022809e73deaefe4f6ec56c66"
-
-[[package]]
-name = "windows_i686_msvc"
 version = "0.53.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1e7ac75179f18232fe9c285163565a57ef8d3c89254a30685b57d83a38d326c2"
@@ -2083,12 +1920,6 @@ name = "windows_x86_64_gnu"
 version = "0.42.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8de912b8b8feb55c064867cf047dda097f92d51efad5b491dfb98f6bbb70cb36"
-
-[[package]]
-name = "windows_x86_64_gnu"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "147a5c80aabfbf0c7d901cb5895d1de30ef2907eb21fbbab29ca94c5b08b1a78"
 
 [[package]]
 name = "windows_x86_64_gnu"
@@ -2104,12 +1935,6 @@ checksum = "26d41b46a36d453748aedef1486d5c7a85db22e56aff34643984ea85514e94a3"
 
 [[package]]
 name = "windows_x86_64_gnullvm"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d"
-
-[[package]]
-name = "windows_x86_64_gnullvm"
 version = "0.53.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ffa179e2d07eee8ad8f57493436566c7cc30ac536a3379fdf008f47f6bb7ae1"
@@ -2119,12 +1944,6 @@ name = "windows_x86_64_msvc"
 version = "0.42.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9aec5da331524158c6d1a4ac0ab1541149c0b9505fde06423b02f5ef0106b9f0"
-
-[[package]]
-name = "windows_x86_64_msvc"
-version = "0.52.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "windows_x86_64_msvc"

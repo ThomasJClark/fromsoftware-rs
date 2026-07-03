@@ -41,6 +41,7 @@ pub struct CSChrThrowModule {
 #[repr(u32)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum ThrowNodeState {
+    None = 0,
     Unk1 = 1,
     Unk2 = 2,
     InThrowAttacker = 3,
